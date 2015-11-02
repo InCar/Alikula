@@ -5,14 +5,13 @@ var MTarget = require('./api/MTarget');
 var Account = require('./api/Account');
 
 app.get('/api/alicms', function (req, res) {
-    console.log(req.query); // URL中的查询字符串解析成的hash数组
     var account = new Account(config.aliyunInstanceId,
             config.aliyunAccessKeyId,
             config.aliyunAccessKeySecret);
     var mtarget = new MTarget(account);
     var options = {Namespace: req.query.Namespace, MetricName: req.query.MetricName,
             Dimensions: '{instanceId:"' + account.getInstanceId() + '", netname: "eth1"}',
-            StartTime: new Date(req.query.StartTime).getTime(), EndTime: new Date(req.query.EndTime).getTime(),
+            StartTime: new Date(req.query.StartTime).getTime() - 8*3600*1000, EndTime: new Date(req.query.EndTime).getTime() - 8*3600*1000,
             Period: req.query.Period, Statistics: req.query.Statistics,
             NextToken: 1, Length: 2000};
     mtarget.getMetricDatumP(options).then(function(response) {

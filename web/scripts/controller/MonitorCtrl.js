@@ -48,18 +48,40 @@ define(['../Alikula', 'jquery'], function(module, $) {
 
         $scope.drawChart = function() {
             $(".modal").modal('hide');
+            if ($scope.heartBeat) {
+                $timeout.cancel($scope.heartBeat);
+            }
             $http.get('/api/alicms', {params: $scope.options}).success(function(json) {
-                console.log(json)
+                if (json.Message) {
+                    alert(json.Message);
+                    return;
+                }
                 var data = json.Datapoints.Datapoint;
                 var converted = [];
                 for (var i = 0; i < data.length; i++) {
                     var item = JSON.parse(data[i]);
-                    converted.push([new Date(item.timestamp).getTime() + 8*3600, Number(item[$scope.options.Statistics])]);
+                    converted.push([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])]);
                 }
                 if ($scope.chart.series.length) {
                     $scope.chart.series[0].remove();
                 }
                 $scope.chart.addSeries({name: $scope.title, data: converted});
+                $scope.heartBeat = $timeout(function() {
+                    var options = $scope.options;
+                    options.EndTime = new Date();
+                    options.StartTime = new Date(new Date().getTime() - 11*60*1000); // 如果上次请求失败，这次也能获取到上次的数据。多1分钟用于防止边缘数据丢失。对于间隔1小时或1天，也按5分钟刷新一次数据。
+                    $http.get('/api/alicms', {params: options}).success(function(json) {
+                        if (json.Message) {
+                            console.log(json.Message);
+                            return;
+                        }
+                        var data = json.Datapoints.Datapoint;
+                        for (var i = 0; i < data.length; i++) {
+                            var item = JSON.parse(data[i]);
+                            $scope.chart.series[0].addPoint([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])]);
+                        }
+                    });
+                }, 5*60*1000);
             }).error(function(msg, code) {
                 alert(msg);
                 $log.error(msg, code);
