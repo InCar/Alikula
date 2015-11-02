@@ -4,12 +4,13 @@
  */
 var Request = require("request");
 var Promise = require("promise");
+Request.requestP = Promise.denodeify(Request);
 var extend = require("extend");
 var uuid = require("node-uuid");
 var querystring = require('querystring');
 var moment = require('moment');
 var config = require('../config/config');
-Request.requestP = Promise.denodeify(Request);
+
 var OpenStack = (function () {
     function OpenStack(account) {
         this._account = account;

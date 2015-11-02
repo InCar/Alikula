@@ -2,7 +2,6 @@
  * Created by liz on 2015/10/29.
  */
 var crypto = require("crypto");
-var Buffer = require("buffer");
 var Account = (function(){
     function Account(instanceId, accessKeyId, accessKeySecret) {
         this._instanceId = instanceId;
