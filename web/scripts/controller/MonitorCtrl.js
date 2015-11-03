@@ -70,8 +70,8 @@ define(['../Alikula', 'jquery'], function(module, $) {
                 //每隔5分钟自动刷新数据
                 $scope.heartBeat = $timeout(function() {
                     var options = $scope.options;
+                    options.StartTime = otions.EndTime;
                     options.EndTime = new Date();
-                    options.StartTime = new Date(new Date().getTime() - 11*60*1000); // 如果上次请求失败，这次也能获取到上次的数据。多1分钟用于防止边缘数据丢失。对于间隔1小时或1天，也按5分钟刷新一次数据。
                     $http.get('/api/alicms', {params: options}).success(function(json) {
                         if (json.Message) {
                             console.log(json.Message);
