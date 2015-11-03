@@ -66,6 +66,8 @@ define(['../Alikula', 'jquery'], function(module, $) {
                     $scope.chart.series[0].remove();
                 }
                 $scope.chart.addSeries({name: $scope.title, data: converted});
+
+                //每隔5分钟自动刷新数据
                 $scope.heartBeat = $timeout(function() {
                     var options = $scope.options;
                     options.EndTime = new Date();
@@ -89,15 +91,13 @@ define(['../Alikula', 'jquery'], function(module, $) {
         };
 
         $timeout(function() {
-            $("input.form-control.datetimepicker").after("<span style='position: absolute; top: 12px; right: 25px;' class='glyphicon glyphicon-calendar'></span>");
+            $("input.form-control.datetimepicker").after("<span style='position: absolute; top: 12px; left: 25px;' class='glyphicon glyphicon-calendar'></span>");
 
-            $(document).on("focus click", "input.datetimepicker", function(e) {
-                $(this).datetimepicker({startView: "day", minView: "hour", maxView: "month", format: "yyyy-mm-dd hh:ii", language: "zh-CN", autoclose: true});
-            });
-
-            $(document).on("blur", "input.datetimepicker", function(e) {
-                $(this).datetimepicker('hide');
-            });
+            $("input.datetimepicker")
+                .datetimepicker({startView: "day", minView: "hour", maxView: "month", format: "yyyy-mm-dd hh:ii", language: "zh-CN", autoclose: true})
+                .on('show', function(ev) {
+                    $("input.datetimepicker").not(this).datetimepicker('hide');
+                });
 
             Highcharts.setOptions({
                 global: {useUTC: false},
