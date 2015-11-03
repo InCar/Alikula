@@ -70,7 +70,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                 //每隔5分钟自动刷新数据
                 $scope.heartBeat = $timeout(function() {
                     var options = $scope.options;
-                    options.StartTime = otions.EndTime;
+                    options.StartTime = options.EndTime;
                     options.EndTime = new Date();
                     $http.get('/api/alicms', {params: options}).success(function(json) {
                         if (json.Message) {
