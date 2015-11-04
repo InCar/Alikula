@@ -61,7 +61,6 @@ define(['../Alikula', 'jquery'], function(module, $) {
                 if ($scope.instanceIdOptions[i].checked) {
                     var opt = $.extend({}, $scope.options);
                     opt.instanceId = $scope.instanceIdOptions[i].value;
-                    console.log(opt);
                     drawLine(opt, $scope.instanceIdOptions[i].label);
                 }
             }
@@ -80,6 +79,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                     var item = JSON.parse(data[i]);
                     converted.push([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])]);
                 }
+                converted.sort(function(i, j) {return i > j ? 1 : -1;});
                 $scope.chart.addSeries({name: title, data: converted});
 
                 //每隔5分钟自动刷新数据
@@ -116,7 +116,6 @@ define(['../Alikula', 'jquery'], function(module, $) {
             Highcharts.setOptions({
                 global: {useUTC: false},
                 lang: {resetZoom: "重置缩放"},
-                colors: ['#4AD1E8', '#00CC00', '#FFBB33', '#DC0000', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
             });
             $scope.chart = new Highcharts.Chart({
                 credits: {enabled: false},
