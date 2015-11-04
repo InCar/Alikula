@@ -11,6 +11,18 @@ define([], function() {
                     'controller/MonitorCtrl'
                 ]
             },
+            '/alicms`': {
+                templateUrl: '/view/alicms`.html',
+                dependencies: [
+                    'controller/MonitorCtrl'
+                ]
+            },
+            '/alicmsMain': {
+                templateUrl: '/view/alicmsMain.html',
+                dependencies: [
+                    'controller/MonitorCtrl'
+                ]
+            },
             '/web/notFound': {
                 templateUrl: '/view/notFound.html'
             }

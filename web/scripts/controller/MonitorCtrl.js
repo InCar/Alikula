@@ -1,5 +1,28 @@
 define(['../Alikula', 'jquery'], function(module, $) {
     module.controller("MonitorCtrl", function($scope, $http, $location, $timeout, commonService) {
+        $scope.myForm = "one";
+        $scope.oneForm = false;
+        $scope.myClass = "baseClass";
+        var state = true;
+        $scope.compare = function(){
+            if(state == false){
+                state = true;
+            }else if(state == true){
+                state = false;
+            }
+            if(state){
+                $scope.movieHight = 0.972*window.screen.height;
+                $scope.oneForm = false;
+                $scope.myClass = "baseClass";
+            }else{
+                $scope.movieHight = 0.486*window.screen.height;
+                $scope.oneForm = true;
+                $scope.myClass = "newClass";
+            }
+
+        };
+        $scope.movieHight = 0.972*window.screen.height;
+        console.log($scope.movieHight);
         $scope.NamespaceOptions = [
             {key: "acs/ecs", value: "云服务:acs/ecs"}
             //"acs/ocs": "开放缓存服务:acs/ocs",

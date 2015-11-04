@@ -1,0 +1,11 @@
+<div class="monitor-component" ng-controller="MonitorCtrl" style="width: 1800px; margin: auto;">
+    <div class="options">
+        <button class="btn btn-default btn-lx btn-warning" ng-click="compare()" data-toggle="tooltip" data-placement="right" title="猛戳进行比较，再次点击则关闭">对比</button>
+    </div>
+    <div>
+        <iframe src="/alicms" width="100%" height="{{movieHight}}" style="border: none;"></iframe>
+    </div>
+    <div ng-show="oneForm">
+        <iframe src="/alicms`" width="100%" height="{{movieHight}}" style="border: none;"></iframe>
+    </div>
+</div>
