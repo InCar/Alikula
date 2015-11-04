@@ -5,12 +5,10 @@ var MTarget = require('./api/MTarget');
 var Account = require('./api/Account');
 
 app.get('/api/alicms', function (req, res) {
-    var account = new Account(config.aliyunInstanceId,
-            config.aliyunAccessKeyId,
-            config.aliyunAccessKeySecret);
+    var account = new Account(config.aliyunAccessKeyId, config.aliyunAccessKeySecret);
     var mtarget = new MTarget(account);
     var options = {Namespace: req.query.Namespace, MetricName: req.query.MetricName,
-            Dimensions: '{instanceId:"' + account.getInstanceId() + '", netname: "eth1"}',
+            instanceId: req.query.instanceId, Dimensions: '{instanceId:"' + req.query.instanceId + '", netname: "eth1"}',
             StartTime: new Date(req.query.StartTime).getTime() - 8*3600*1000, EndTime: new Date(req.query.EndTime).getTime() - 8*3600*1000,
             Period: req.query.Period, Statistics: req.query.Statistics,
             NextToken: 1, Length: 2000};

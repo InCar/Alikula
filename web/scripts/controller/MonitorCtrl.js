@@ -1,32 +1,37 @@
 define(['../Alikula', 'jquery'], function(module, $) {
     module.controller("MonitorCtrl", function($scope, $http, $location, $timeout, commonService) {
         $scope.NamespaceOptions = [
-            {key: "acs/ecs", value: "云服务:acs/ecs"}
+            {value: "acs/ecs", label: "云服务:acs/ecs"}
             //"acs/ocs": "开放缓存服务:acs/ocs",
             //"acs/rds": "云数据库:acs/rds",
             //"acs/slb": "负载均衡:acs/slb"
         ];
+        $scope.instanceIdOptions = [
+            {value: "i-236pp2bne", label: "TestingServer", checked: true},
+            {value: "i-23orv50er", label: "inCarDev", checked: true},
+            {value: "AY140402102724524c92", label: "INCAR01", checked: true}
+        ]
         $scope.MetricNameOptions = [
-            {key: "vm.CPUUtilization", value: "CPU使用率(%):vm.CPUUtilization"},
-            {key: "vm.MemoryUtilization", value: "内存使用率(%):vm.MemoryUtilization"},
-            {key: "vm.DiskIORead", value: "磁盘IO读(KB/s):vm.DiskIORead"},
-            {key: "vm.DiskIOWrite", value: "磁盘IO写(KB/s):vm.DiskIOWrite"},
-            {key: "vm.InternetNetworkRX", value: "网络上行(入)流量(Kb/s):vm.InternetNetworkRX"},
-            {key: "vm.InternetNetworkTX", value: "网络下行(出)流量(Kb/s):vm.InternetNetworkTX"}
+            {value: "vm.CPUUtilization", label: "CPU使用率(%):vm.CPUUtilization"},
+            {value: "vm.MemoryUtilization", label: "内存使用率(%):vm.MemoryUtilization"},
+            {value: "vm.DiskIORead", label: "磁盘IO读(KB/s):vm.DiskIORead"},
+            {value: "vm.DiskIOWrite", label: "磁盘IO写(KB/s):vm.DiskIOWrite"},
+            {value: "vm.InternetNetworkRX", label: "网络上行(入)流量(Kb/s):vm.InternetNetworkRX"},
+            {value: "vm.InternetNetworkTX", label: "网络下行(出)流量(Kb/s):vm.InternetNetworkTX"}
         ];
         $scope.PeriodOptions = [
-            {key: "5m", value: "5分钟"},
-            {key: "15m", value: "15分钟"},
-            {key: "30m", value: "30分钟"},
-            {key: "1h", value: "1小时"},
-            {key: "1d", value: "1天"}
+            {value: "5m", label: "5分钟"},
+            {value: "15m", label: "15分钟"},
+            {value: "30m", label: "30分钟"},
+            {value: "1h", label: "1小时"},
+            {value: "1d", label: "1天"}
         ];
         $scope.StatisticsOptions = [
-            {key: "Average", value: "平均值:Average"},
-            {key: "Sum", value: "合计值:Sum"},
-            {key: "SampleCount", value: "采样值:SampleCount"},
-            {key: "Maximum", value: "最大值:Maximum"},
-            {key: "Minimum", value: "最小值:Minimum"}
+            {value: "Average", label: "平均值:Average"},
+            {value: "Sum", label: "合计值:Sum"},
+            {value: "SampleCount", label: "采样值:SampleCount"},
+            {value: "Maximum", label: "最大值:Maximum"},
+            {value: "Minimum", label: "最小值:Minimum"}
         ];
         $scope.options = {
             Namespace: 'acs/ecs',
@@ -40,8 +45,8 @@ define(['../Alikula', 'jquery'], function(module, $) {
         $scope.$watch('options.MetricName', function() {
             var MetricName = $scope.options.MetricName;
             for (var i = 0; i < $scope.MetricNameOptions.length; i++) {
-                if (MetricName == $scope.MetricNameOptions[i].key) {
-                    $scope.title = $scope.MetricNameOptions[i].value.split(":")[0];
+                if (MetricName == $scope.MetricNameOptions[i].value) {
+                    $scope.title = $scope.MetricNameOptions[i].label.split(":")[0];
                 }
             }
         });
@@ -51,7 +56,20 @@ define(['../Alikula', 'jquery'], function(module, $) {
             if ($scope.heartBeat) {
                 $timeout.cancel($scope.heartBeat);
             }
-            $http.get('/api/alicms', {params: $scope.options}).success(function(json) {
+            while($scope.chart.series.length > 0) $scope.chart.series[0].remove(true);
+            for (var i = 0; i < $scope.instanceIdOptions.length; i++) {
+                if ($scope.instanceIdOptions[i].checked) {
+                    var opt = $.extend({}, $scope.options);
+                    opt.instanceId = $scope.instanceIdOptions[i].value;
+                    console.log(opt);
+                    drawLine(opt, $scope.instanceIdOptions[i].label);
+                }
+            }
+
+        };
+
+        function drawLine(thisOptions, title) {
+            $http.get('/api/alicms', {params: thisOptions}).success(function(json) {
                 if (json.Message) {
                     alert(json.Message);
                     return;
@@ -62,17 +80,14 @@ define(['../Alikula', 'jquery'], function(module, $) {
                     var item = JSON.parse(data[i]);
                     converted.push([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])]);
                 }
-                if ($scope.chart.series.length) {
-                    $scope.chart.series[0].remove();
-                }
-                $scope.chart.addSeries({name: $scope.title, data: converted});
+                $scope.chart.addSeries({name: title, data: converted});
 
                 //每隔5分钟自动刷新数据
                 $scope.heartBeat = $timeout(function() {
-                    var options = $scope.options;
-                    options.StartTime = options.EndTime;
-                    options.EndTime = new Date();
-                    $http.get('/api/alicms', {params: options}).success(function(json) {
+                    var opt = thisOptions;
+                    opt.StartTime = thisOptions.EndTime;
+                    opt.EndTime = new Date();
+                    $http.get('/api/alicms', {params: opt}).success(function(json) {
                         if (json.Message) {
                             console.log(json.Message);
                             return;
@@ -86,9 +101,8 @@ define(['../Alikula', 'jquery'], function(module, $) {
                 }, 5*60*1000);
             }).error(function(msg, code) {
                 alert(msg);
-                $log.error(msg, code);
             });
-        };
+        }
 
         $timeout(function() {
             $("input.form-control.datetimepicker").after("<span style='position: absolute; top: 12px; left: 25px;' class='glyphicon glyphicon-calendar'></span>");

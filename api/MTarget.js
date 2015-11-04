@@ -15,8 +15,6 @@ var MTarget = (function () {
         var specParams = {
             Action: 'DescribeMetricDatum',
             Timestamp: moment.utc().format("YYYY-MM-DDTHH:mm:ss") + "Z", // 刷新时间戳
-            instanceId: this._openstack.getAccount().getInstanceId(),
-            Dimensions: '{instanceId:"' + this._openstack.getAccount().getInstanceId() + '"}',
         };
         return this._openstack.sendP(extend(specParams, options));
     }
