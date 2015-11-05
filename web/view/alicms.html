@@ -18,11 +18,10 @@
                 <div class="modal-body">
                     <form class="form-horizontal" ng-submit="drawChart()">
                         <div class="form-group">
-                            <label class="control-label col-sm-2 col-sm-offset-1">InstanceId: </label>
+                            <label class="control-label col-sm-2 col-sm-offset-1">Instance: </label>
                             <div class="col-sm-8">
-                                <select class="form-control" ng-model="options.InstanceId">
-                                    <option value="{{opt.value}}" ng-repeat="opt in InstanceIdOptions">{{opt.label}}</option>
-                                </select>
+                                <label class="checkbox-inline" ng-repeat="opt in instanceIdOptions" >
+                                    <input type="checkbox" value="{{opt.value}}" ng-model="opt.checked"/>{{opt.label}}</label>
                             </div>
                         </div>
                         <div class="form-group">

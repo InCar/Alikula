@@ -34,6 +34,11 @@ define(['../Alikula', 'jquery'], function(module, $) {
             //"acs/rds": "云数据库:acs/rds",
             //"acs/slb": "负载均衡:acs/slb"
         ];
+        $scope.instanceIdOptions = [
+            {value: "i-236pp2bne", label: "TestingServer", checked: true},
+            {value: "i-23orv50er", label: "inCarDev", checked: true},
+            {value: "AY140402102724524c92", label: "INCAR01", checked: true}
+        ]
         $scope.MetricNameOptions = [
             {value: "vm.CPUUtilization", label: "CPU使用率(%):vm.CPUUtilization"},
             {value: "vm.MemoryUtilization", label: "内存使用率(%):vm.MemoryUtilization"},
@@ -70,10 +75,8 @@ define(['../Alikula', 'jquery'], function(module, $) {
             var MetricName = $scope.options.MetricName;
             var instanceName = $scope.options.InstanceId;
             for (var i = 0; i < $scope.MetricNameOptions.length; i++) {
-                for(var j = 0; j < $scope.InstanceIdOptions.length; j++){
-                    if (MetricName == $scope.MetricNameOptions[i].value&&instanceName == $scope.InstanceIdOptions[j].value) {
-                        $scope.title = $scope.InstanceIdOptions[j].label.split(":")[0] + "  :  " + $scope.MetricNameOptions[i].label.split(":")[0];
-                    }
+                if (MetricName == $scope.MetricNameOptions[i].value) {
+                    $scope.title = $scope.MetricNameOptions[i].label.split(":")[0];
                 }
             }
         }, true);
@@ -83,7 +86,19 @@ define(['../Alikula', 'jquery'], function(module, $) {
             if ($scope.heartBeat) {
                 $timeout.cancel($scope.heartBeat);l
             }
-            $http.get('/api/alicms', {params: $scope.options}).success(function(json) {
+            while($scope.chart.series.length > 0) $scope.chart.series[0].remove(true);
+            for (var i = 0; i < $scope.instanceIdOptions.length; i++) {
+                if ($scope.instanceIdOptions[i].checked) {
+                    var opt = $.extend({}, $scope.options);
+                    opt.instanceId = $scope.instanceIdOptions[i].value;
+                    drawLine(opt, $scope.instanceIdOptions[i].label);
+                }
+            }
+
+        };
+
+        function drawLine(thisOptions, title) {
+            $http.get('/api/alicms', {params: thisOptions}).success(function(json) {
                 if (json.Message) {
                     alert(json.Message);
                     return;
@@ -94,17 +109,15 @@ define(['../Alikula', 'jquery'], function(module, $) {
                     var item = JSON.parse(data[i]);
                     converted.push([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])]);
                 }
-                if ($scope.chart.series.length) {
-                    $scope.chart.series[0].remove();
-                }
-                $scope.chart.addSeries({name: $scope.title, data: converted});
+                converted.sort(function(i, j) {return i > j ? 1 : -1;});
+                $scope.chart.addSeries({name: title, data: converted});
 
                 //每隔5分钟自动刷新数据
                 $scope.heartBeat = $timeout(function() {
-                    var options = $scope.options;
-                    options.StartTime = options.EndTime;
-                    options.EndTime = new Date();
-                    $http.get('/api/alicms', {params: options}).success(function(json) {
+                    var opt = thisOptions;
+                    opt.StartTime = thisOptions.EndTime;
+                    opt.EndTime = new Date();
+                    $http.get('/api/alicms', {params: opt}).success(function(json) {
                         if (json.Message) {
                             console.log(json.Message);
                             return;
@@ -118,9 +131,8 @@ define(['../Alikula', 'jquery'], function(module, $) {
                 }, 5*60*1000);
             }).error(function(msg, code) {
                 alert(msg);
-                $log.error(msg, code);
             });
-        };
+        }
 
         $timeout(function() {
             $("input.form-control.datetimepicker").after("<span style='position: absolute; top: 12px; left: 25px;' class='glyphicon glyphicon-calendar'></span>");
@@ -134,7 +146,6 @@ define(['../Alikula', 'jquery'], function(module, $) {
             Highcharts.setOptions({
                 global: {useUTC: false},
                 lang: {resetZoom: "重置缩放"},
-                colors: ['#4AD1E8', '#00CC00', '#FFBB33', '#DC0000', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
             });
             $scope.chart = new Highcharts.Chart({
                 credits: {enabled: false},

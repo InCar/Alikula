@@ -3,17 +3,14 @@
  */
 var crypto = require("crypto");
 var Account = (function(){
-    function Account(instanceId, accessKeyId, accessKeySecret) {
-        this._instanceId = instanceId;
+    function Account(accessKeyId, accessKeySecret) {
         this._accessKeyId = accessKeyId;
         this._accessKeySecret = accessKeySecret;
     }
+
     Account.prototype.getAccessKeyId = function () {
         return this._accessKeyId;
     };
-    Account.prototype.getInstanceId = function() {
-        return this._instanceId;
-    }
 
     // encoding: "hex", "binary" or "base64"
     Account.prototype.hmac_sha1 = function (text, encoding) {

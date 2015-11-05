@@ -13,3 +13,4 @@ hs_err_pid*
 index.js.map
 .idea/
 node_modules/
+config/config.js
