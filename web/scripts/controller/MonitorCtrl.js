@@ -23,11 +23,6 @@ define(['../Alikula', 'jquery'], function(module, $) {
         };
         $scope.movieHight = 0.972*window.screen.height;
         console.log($scope.movieHight);
-        $scope.InstanceIdOptions = [
-            {label: "TestingServer", value: "i-236pp2bne"},
-            {label: "inCarDev", value: "i-23orv50er"},
-            {label: "INCAR01", value: "AY140402102724524c92"}
-        ];
         $scope.NamespaceOptions = [
             {value: "acs/ecs", label: "云服务:acs/ecs"}
             //"acs/ocs": "开放缓存服务:acs/ocs",
