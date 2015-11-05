@@ -5,7 +5,7 @@ var MTarget = require('./api/MTarget');
 var Account = require('./api/Account');
 
 app.get('/api/alicms', function (req, res) {
-    var account = new Account(config.aliyunInstanceId,
+    var account = new Account(req.query.InstanceId,
             config.aliyunAccessKeyId,
             config.aliyunAccessKeySecret);
     var mtarget = new MTarget(account);

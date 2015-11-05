@@ -18,10 +18,18 @@
                 <div class="modal-body">
                     <form class="form-horizontal" ng-submit="drawChart()">
                         <div class="form-group">
+                            <label class="control-label col-sm-2 col-sm-offset-1">InstanceId: </label>
+                            <div class="col-sm-8">
+                                <select class="form-control" ng-model="options.InstanceId">
+                                    <option value="{{opt.value}}" ng-repeat="opt in InstanceIdOptions">{{opt.label}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="control-label col-sm-2 col-sm-offset-1">Namespace: </label>
                             <div class="col-sm-8">
                                 <select class="form-control" ng-model="options.Namespace">
-                                    <option value="{{opt.key}}" ng-repeat="opt in NamespaceOptions">{{opt.value}}</option>
+                                    <option value="{{opt.value}}" ng-repeat="opt in NamespaceOptions">{{opt.label}}</option>
                                 </select>
                             </div>
                         </div>
@@ -29,7 +37,7 @@
                             <label class="control-label col-sm-2 col-sm-offset-1">MetricName: </label>
                             <div class="col-sm-8">
                                 <select class="form-control" ng-model="options.MetricName">
-                                    <option value="{{opt.key}}" ng-repeat="opt in MetricNameOptions">{{opt.value}}</option>
+                                    <option value="{{opt.value}}" ng-repeat="opt in MetricNameOptions">{{opt.label}}</option>
                                 </select>
                             </div>
                         </div>
@@ -45,7 +53,7 @@
                             <label class="control-label col-sm-2 col-sm-offset-1">时间间隔: </label>
                             <div class="col-sm-8">
                                 <select class="form-control" ng-model="options.Period">
-                                    <option value="{{opt.key}}" ng-repeat="opt in PeriodOptions">{{opt.value}}</option>
+                                    <option value="{{opt.value}}" ng-repeat="opt in PeriodOptions">{{opt.label}}</option>
                                 </select>
                             </div>
                         </div>
@@ -53,7 +61,7 @@
                             <label class="control-label col-sm-2 col-sm-offset-1">统计方法: </label>
                             <div class="col-sm-8">
                                 <select class="form-control" ng-model="options.Statistics">
-                                    <option value="{{opt.key}}" ng-repeat="opt in StatisticsOptions">{{opt.value}}</option>
+                                    <option value="{{opt.value}}" ng-repeat="opt in StatisticsOptions">{{opt.label}}</option>
                                 </select>
                             </div>
                         </div>

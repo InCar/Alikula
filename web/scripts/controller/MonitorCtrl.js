@@ -23,35 +23,41 @@ define(['../Alikula', 'jquery'], function(module, $) {
         };
         $scope.movieHight = 0.972*window.screen.height;
         console.log($scope.movieHight);
+        $scope.InstanceIdOptions = [
+            {label: "TestingServer", value: "i-236pp2bne"},
+            {label: "inCarDev", value: "i-23orv50er"},
+            {label: "INCAR01", value: "AY140402102724524c92"}
+        ];
         $scope.NamespaceOptions = [
-            {key: "acs/ecs", value: "云服务:acs/ecs"}
+            {value: "acs/ecs", label: "云服务:acs/ecs"}
             //"acs/ocs": "开放缓存服务:acs/ocs",
             //"acs/rds": "云数据库:acs/rds",
             //"acs/slb": "负载均衡:acs/slb"
         ];
         $scope.MetricNameOptions = [
-            {key: "vm.CPUUtilization", value: "CPU使用率(%):vm.CPUUtilization"},
-            {key: "vm.MemoryUtilization", value: "内存使用率(%):vm.MemoryUtilization"},
-            {key: "vm.DiskIORead", value: "磁盘IO读(KB/s):vm.DiskIORead"},
-            {key: "vm.DiskIOWrite", value: "磁盘IO写(KB/s):vm.DiskIOWrite"},
-            {key: "vm.InternetNetworkRX", value: "网络上行(入)流量(Kb/s):vm.InternetNetworkRX"},
-            {key: "vm.InternetNetworkTX", value: "网络下行(出)流量(Kb/s):vm.InternetNetworkTX"}
+            {value: "vm.CPUUtilization", label: "CPU使用率(%):vm.CPUUtilization"},
+            {value: "vm.MemoryUtilization", label: "内存使用率(%):vm.MemoryUtilization"},
+            {value: "vm.DiskIORead", label: "磁盘IO读(KB/s):vm.DiskIORead"},
+            {value: "vm.DiskIOWrite", label: "磁盘IO写(KB/s):vm.DiskIOWrite"},
+            {value: "vm.InternetNetworkRX", label: "网络上行(入)流量(Kb/s):vm.InternetNetworkRX"},
+            {value: "vm.InternetNetworkTX", label: "网络下行(出)流量(Kb/s):vm.InternetNetworkTX"}
         ];
         $scope.PeriodOptions = [
-            {key: "5m", value: "5分钟"},
-            {key: "15m", value: "15分钟"},
-            {key: "30m", value: "30分钟"},
-            {key: "1h", value: "1小时"},
-            {key: "1d", value: "1天"}
+            {value: "5m", label: "5分钟"},
+            {value: "15m", label: "15分钟"},
+            {value: "30m", label: "30分钟"},
+            {value: "1h", label: "1小时"},
+            {value: "1d", label: "1天"}
         ];
         $scope.StatisticsOptions = [
-            {key: "Average", value: "平均值:Average"},
-            {key: "Sum", value: "合计值:Sum"},
-            {key: "SampleCount", value: "采样值:SampleCount"},
-            {key: "Maximum", value: "最大值:Maximum"},
-            {key: "Minimum", value: "最小值:Minimum"}
+            {value: "Average", label: "平均值:Average"},
+            {value: "Sum", label: "合计值:Sum"},
+            {value: "SampleCount", label: "采样值:SampleCount"},
+            {value: "Maximum", label: "最大值:Maximum"},
+            {value: "Minimum", label: "最小值:Minimum"}
         ];
         $scope.options = {
+            InstanceId:'i-236pp2bne',
             Namespace: 'acs/ecs',
             MetricName: 'vm.CPUUtilization',
             Period: '5m',
@@ -60,19 +66,22 @@ define(['../Alikula', 'jquery'], function(module, $) {
             EndTime: commonService.dateFormat(new Date(), "yyyy-MM-dd HH:mm")
         };
         /* 更新标题 */
-        $scope.$watch('options.MetricName', function() {
+        $scope.$watch('options', function() {
             var MetricName = $scope.options.MetricName;
+            var instanceName = $scope.options.InstanceId;
             for (var i = 0; i < $scope.MetricNameOptions.length; i++) {
-                if (MetricName == $scope.MetricNameOptions[i].key) {
-                    $scope.title = $scope.MetricNameOptions[i].value.split(":")[0];
+                for(var j = 0; j < $scope.InstanceIdOptions.length; j++){
+                    if (MetricName == $scope.MetricNameOptions[i].value&&instanceName == $scope.InstanceIdOptions[j].value) {
+                        $scope.title = $scope.InstanceIdOptions[j].label.split(":")[0] + "  :  " + $scope.MetricNameOptions[i].label.split(":")[0];
+                    }
                 }
             }
-        });
+        }, true);
 
         $scope.drawChart = function() {
             $(".modal").modal('hide');
             if ($scope.heartBeat) {
-                $timeout.cancel($scope.heartBeat);
+                $timeout.cancel($scope.heartBeat);l
             }
             $http.get('/api/alicms', {params: $scope.options}).success(function(json) {
                 if (json.Message) {
