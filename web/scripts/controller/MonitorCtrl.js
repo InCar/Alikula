@@ -110,7 +110,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                     converted.push([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])]);
                 }
                 converted.sort(function(i, j) {return i > j ? 1 : -1;});
-                $scope.chart.addSeries({name: title, data: converted});
+                var thisSeries = $scope.chart.addSeries({name: title, data: converted});
 
                 //每隔5分钟自动刷新数据
                 $scope.heartBeat = $timeout(function() {
@@ -125,7 +125,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                         var data = json.Datapoints.Datapoint;
                         for (var i = 0; i < data.length; i++) {
                             var item = JSON.parse(data[i]);
-                            $scope.chart.series[0].addPoint([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])]);
+                            thisSeries.addPoint([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])]);
                         }
                     });
                 }, 5*60*1000);
