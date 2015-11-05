@@ -10,7 +10,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
             {value: "i-236pp2bne", label: "TestingServer", checked: true},
             {value: "i-23orv50er", label: "inCarDev", checked: true},
             {value: "AY140402102724524c92", label: "INCAR01", checked: true}
-        ]
+        ];
         $scope.MetricNameOptions = [
             {value: "vm.CPUUtilization", label: "CPU使用率(%):vm.CPUUtilization"},
             {value: "vm.MemoryUtilization", label: "内存使用率(%):vm.MemoryUtilization"},
@@ -159,6 +159,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                     border: 0, borderRadius: 5, backgroundColor: '#eee', itemHoverStyle: {color: '#D00'}, enabled: true
                 },
                 plotOptions: {
+                    series: {lineWidth: 2, states: {hover: {enabled: true, lineWidth: 2}}},
                     area: {lineWidth: 1, marker: {enabled: false, radius: 4}, shadow: false, states: {hover: {lineWidth: 1}}, dataLabels: {enabled: true, color: "#ccc"}},
                     line: {lineWidth: 1, marker: {enabled: false, radius: 4}, dataLabels: {enabled: false, color: "#ccc"}, states: {hover: {lineWidth: 1}}},
                     column: {stacking: 'normal', dataLabels: {enabled: false, color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white', style: { textShadow: '0 0 2px black, 0 0 2px black'}}}
