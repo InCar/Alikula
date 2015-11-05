@@ -38,7 +38,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
             {value: "i-236pp2bne", label: "TestingServer", checked: true},
             {value: "i-23orv50er", label: "inCarDev", checked: true},
             {value: "AY140402102724524c92", label: "INCAR01", checked: true}
-        ]
+        ];
         $scope.MetricNameOptions = [
             {value: "vm.CPUUtilization", label: "CPU使用率(%):vm.CPUUtilization"},
             {value: "vm.MemoryUtilization", label: "内存使用率(%):vm.MemoryUtilization"},
