@@ -1,5 +1,5 @@
 define(['../Alikula', 'jquery'], function(module, $) {
-    module.controller("MonitorCtrl", function($scope, $http, $location, $timeout, commonService) {
+    module.controller("MonitorCtrl", function($scope, $http, $location, $timeout, $interval, commonService) {
         $scope.NamespaceOptions = [
             {value: "acs/ecs", label: "云服务:acs/ecs"}
             //"acs/ocs": "开放缓存服务:acs/ocs",
@@ -53,10 +53,16 @@ define(['../Alikula', 'jquery'], function(module, $) {
 
         $scope.drawChart = function() {
             $(".modal").modal('hide');
-            if ($scope.heartBeat) {
-                $timeout.cancel($scope.heartBeat);
+
+            if ($scope.heartBeats && $scope.heartBeats.length) {
+                for (var i = 0; i < $scope.heartBeats.length; i++) {
+                    $interval.cancel($scope.heartBeats[i]);
+                }
             }
+            $scope.heartBeats = [];
+
             while($scope.chart.series.length > 0) $scope.chart.series[0].remove(true);
+
             for (var i = 0; i < $scope.instanceIdOptions.length; i++) {
                 if ($scope.instanceIdOptions[i].checked) {
                     var opt = $.extend({}, $scope.options);
@@ -64,7 +70,6 @@ define(['../Alikula', 'jquery'], function(module, $) {
                     drawLine(opt, $scope.instanceIdOptions[i].label);
                 }
             }
-
         };
 
         function drawLine(thisOptions, title) {
@@ -83,7 +88,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                 var thisSeries = $scope.chart.addSeries({name: title, data: converted});
 
                 //每隔5分钟自动刷新数据
-                $scope.heartBeat = $timeout(function() {
+                $scope.heartBeats.push($interval(function() {
                     var opt = thisOptions;
                     opt.StartTime = thisOptions.EndTime;
                     opt.EndTime = new Date();
@@ -98,7 +103,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                             thisSeries.addPoint([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])]);
                         }
                     });
-                }, 5*60*1000);
+                }, 5*60*1000));
             }).error(function(msg, code) {
                 alert(msg);
             });
