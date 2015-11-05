@@ -84,7 +84,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
         $scope.drawChart = function() {
             $(".modal").modal('hide');
             if ($scope.heartBeat) {
-                $timeout.cancel($scope.heartBeat);l
+                $timeout.cancel($scope.heartBeat);
             }
             while($scope.chart.series.length > 0) $scope.chart.series[0].remove(true);
             for (var i = 0; i < $scope.instanceIdOptions.length; i++) {
@@ -145,7 +145,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
 
             Highcharts.setOptions({
                 global: {useUTC: false},
-                lang: {resetZoom: "重置缩放"},
+                lang: {resetZoom: "重置缩放"}
             });
             $scope.chart = new Highcharts.Chart({
                 credits: {enabled: false},
