@@ -11,17 +11,17 @@ define(['../Alikula', 'jquery'], function(module, $) {
                 state = false;
             }
             if(state){
-                $scope.movieHight = 0.972*window.screen.height;
+                $scope.movieHight = 0.84*window.screen.height;
                 $scope.oneForm = false;
                 $scope.myClass = "baseClass";
             }else{
-                $scope.movieHight = 0.486*window.screen.height;
+                $scope.movieHight = 0.42*window.screen.height;
                 $scope.oneForm = true;
                 $scope.myClass = "newClass";
             }
 
         };
-        $scope.movieHight = 0.972*window.screen.height;
+        $scope.movieHight = 0.84*window.screen.height;
         console.log($scope.movieHight);
         $scope.NamespaceOptions = [
             {value: "acs/ecs", label: "云服务:acs/ecs"}
@@ -62,7 +62,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
             MetricName: 'vm.CPUUtilization',
             Period: '5m',
             Statistics: 'Average',
-            StartTime: commonService.dateFormat(new Date(new Date().getTime() - 3*24*3600*1000), "yyyy-MM-dd HH:mm"),
+            StartTime: commonService.dateFormat(new Date(new Date().getTime() - 24*3600*1000), "yyyy-MM-dd HH:mm"),
             EndTime: commonService.dateFormat(new Date(), "yyyy-MM-dd HH:mm")
         };
         /* 更新标题 */
@@ -125,7 +125,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                         var data = json.Datapoints.Datapoint;
                         for (var i = 0; i < data.length; i++) {
                             var item = JSON.parse(data[i]);
-                            thisSeries.addPoint([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])]);
+                            thisSeries.addPoint([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])], true, true);
                         }
                     });
                 }, 5*60*1000));
@@ -184,8 +184,9 @@ define(['../Alikula', 'jquery'], function(module, $) {
                     border: 0, borderRadius: 5, backgroundColor: '#eee', itemHoverStyle: {color: '#D00'}, enabled: true
                 },
                 plotOptions: {
-                    area: {lineWidth: 1, marker: {enabled: false, radius: 4}, shadow: false, states: {hover: {lineWidth: 1}}, dataLabels: {enabled: true, color: "#ccc"}},
-                    line: {lineWidth: 1, marker: {enabled: false, radius: 4}, dataLabels: {enabled: false, color: "#ccc"}, states: {hover: {lineWidth: 1}}},
+                    series: {lineWidth: 3, states: {hover: {enabled: true, lineWidth: 3}}},
+                    area: {lineWidth: 2, marker: {enabled: false, radius: 4}, shadow: false, states: {hover: {lineWidth: 2}}, dataLabels: {enabled: true, color: "#ccc"}},
+                    line: {lineWidth: 2, marker: {enabled: false, radius: 4}, dataLabels: {enabled: false, color: "#ccc"}, states: {hover: {lineWidth: 2}}},
                     column: {stacking: 'normal', dataLabels: {enabled: false, color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white', style: { textShadow: '0 0 2px black, 0 0 2px black'}}}
                 }
             });
