@@ -100,7 +100,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                         var data = json.Datapoints.Datapoint;
                         for (var i = 0; i < data.length; i++) {
                             var item = JSON.parse(data[i]);
-                            thisSeries.addPoint([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])]);
+                            thisSeries.addPoint([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])], true, true);
                         }
                     });
                 }, 5*60*1000));
