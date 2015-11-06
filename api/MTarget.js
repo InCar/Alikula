@@ -14,7 +14,7 @@ var MTarget = (function () {
     MTarget.prototype.getMetricDatumP = function(options) {
         var specParams = {
             Action: 'DescribeMetricDatum',
-            Timestamp: moment.utc().format("YYYY-MM-DDTHH:mm:ss") + "Z", // 刷新时间戳
+            Timestamp: moment.utc().format("YYYY-MM-DDTHH:mm:ss") + "Z" // 刷新时间戳
         };
         return this._openstack.sendP(extend(specParams, options));
     }
