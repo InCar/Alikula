@@ -129,7 +129,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                 title: {text: ''},
                 xAxis: {
                     type: 'datetime',
-                    labels: {style: {color: "#aaa"}, step: 1, formatter: function() {
+                    labels: {style: {color: "#aaa", fontSize: "18px"}, step: 1, formatter: function() {
                             return Highcharts.dateFormat('%H:%M', this.value);
                         }
                     }
@@ -137,7 +137,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                 yAxis: {
                     title: {text: ''},
                     gridLineColor: '#eee',
-                    labels: {style: {color: '#aaa'}},
+                    labels: {style: {color: '#aaa', fontSize: "18px"}},
                     stackLabels: {enabled: true, style: {fontWeight: 'bold', color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'}}
                 },
                 tooltip: {
@@ -156,7 +156,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                     }
                 },
                 legend: {
-                    border: 0, borderRadius: 5, backgroundColor: '#eee', itemHoverStyle: {color: '#D00'}, enabled: true
+                    border: 0, borderRadius: 5, backgroundColor: '#eee', itemStyle: {fontSize: "18px"}, itemHoverStyle: {color: '#D00'}, enabled: true
                 },
                 plotOptions: {
                     series: {lineWidth: 2, states: {hover: {enabled: true, lineWidth: 2}}},
