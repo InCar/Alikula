@@ -183,10 +183,10 @@ define(['../Alikula', 'jquery'], function(module, $) {
                     }
                 },
                 legend: {
-                    border: 0, borderRadius: 5, backgroundColor: '#eee', itemHoverStyle: {color: '#D00'}, enabled: true
+                    border: 0, borderRadius: 5, backgroundColor: '#eee', fontSize: 10, itemHoverStyle: {color: '#D00'}, enabled: true
                 },
                 plotOptions: {
-                    series: {lineWidth: 3, states: {hover: {enabled: true, lineWidth: 3}}},
+                    series: {lineWidth: 7, states: {hover: {enabled: true, lineWidth: 7}}},
                     area: {lineWidth: 2, marker: {enabled: false, radius: 4}, shadow: false, states: {hover: {lineWidth: 2}}, dataLabels: {enabled: true, color: "#ccc"}},
                     line: {lineWidth: 2, marker: {enabled: false, radius: 4}, dataLabels: {enabled: false, color: "#ccc"}, states: {hover: {lineWidth: 2}}},
                     column: {stacking: 'normal', dataLabels: {enabled: false, color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white', style: { textShadow: '0 0 2px black, 0 0 2px black'}}}
