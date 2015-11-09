@@ -1,7 +1,6 @@
 define(['../Alikula', 'jquery'], function(module, $) {
     module.controller("MonitorCtrl", function($scope, $http, $location, $timeout, $interval, commonService) {
         $scope.myForm = "one";
-        $scope.oneForm = false;
         $scope.myClass = "baseClass";
         var state = true;
         $scope.compare = function(){
@@ -11,16 +10,13 @@ define(['../Alikula', 'jquery'], function(module, $) {
                 state = false;
             }
             if(state){
-                $scope.movieHight = 0.84*window.screen.height;
-                $scope.oneForm = false;
                 $scope.myClass = "baseClass";
             }else{
-                $scope.movieHight = 0.42*window.screen.height;
-                $scope.oneForm = true;
                 $scope.myClass = "newClass";
             }
 
         };
+        $scope.movieHights = 0.42*window.screen.height;
         $scope.movieHight = 0.84*window.screen.height;
         console.log($scope.movieHight);
         $scope.NamespaceOptions = [

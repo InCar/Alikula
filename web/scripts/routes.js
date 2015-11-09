@@ -23,6 +23,12 @@ define([], function() {
                     'controller/MonitorCtrl'
                 ]
             },
+            '/alicmMain': {
+                templateUrl: '/view/alicmMain.html',
+                dependencies: [
+                    'controller/MonitorCtrl'
+                ]
+            },
             '/web/notFound': {
                 templateUrl: '/view/notFound.html'
             }
