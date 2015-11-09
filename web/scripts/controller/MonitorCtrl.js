@@ -1,6 +1,8 @@
 define(['../Alikula', 'jquery'], function(module, $) {
     module.controller("MonitorCtrl", function($scope, $http, $location, $timeout, $interval, commonService) {
         $scope.myForm = "one";
+        $scope.oneForm = true;
+        $scope.twoForm = false;
         $scope.myClass = "baseClass";
         var state = true;
         $scope.compare = function(){
@@ -10,8 +12,12 @@ define(['../Alikula', 'jquery'], function(module, $) {
                 state = false;
             }
             if(state){
+                $scope.oneForm = true;
+                $scope.twoForm = false;
                 $scope.myClass = "baseClass";
             }else{
+                $scope.oneForm = false;
+                $scope.twoForm = true;
                 $scope.myClass = "newClass";
             }
 
