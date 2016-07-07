@@ -26,7 +26,8 @@ define(['../Alikula', 'jquery'], function(module, $) {
         $scope.movieHight = 0.84*window.screen.height;
         console.log($scope.movieHight);
         $scope.NamespaceOptions = [
-            {value: "acs/ecs", label: "云服务:acs/ecs"}
+            {value: "acs_ecs", label: "云服务:acs_ecs"},
+            //{value: "acs_rds", label: "云服务:acs_rds"}
             //"acs/ocs": "开放缓存服务:acs/ocs",
             //"acs/rds": "云数据库:acs/rds",
             //"acs/slb": "负载均衡:acs/slb"
@@ -37,19 +38,17 @@ define(['../Alikula', 'jquery'], function(module, $) {
             {value: "AY140402102724524c92", label: "INCAR01", checked: true}
         ];
         $scope.MetricNameOptions = [
-            {value: "vm.CPUUtilization", label: "CPU使用率(%):vm.CPUUtilization"},
+            {value: "CPUUtilization", label: "CPU使用率(%):CPUUtilization"},
             {value: "vm.MemoryUtilization", label: "内存使用率(%):vm.MemoryUtilization"},
-            {value: "vm.DiskIORead", label: "磁盘IO读(KB/s):vm.DiskIORead"},
-            {value: "vm.DiskIOWrite", label: "磁盘IO写(KB/s):vm.DiskIOWrite"},
-            {value: "vm.InternetNetworkRX", label: "网络上行(入)流量(Kb/s):vm.InternetNetworkRX"},
-            {value: "vm.InternetNetworkTX", label: "网络下行(出)流量(Kb/s):vm.InternetNetworkTX"}
+            {value: "vm.DiskIOReadNew", label: "磁盘IO读(KB/s):vm.DiskIOReadNew"},
+            {value: "vm.DiskIOWriteNew", label: "磁盘IO写(KB/s):vm.DiskIOWriteNew"},
+            {value: "InternetInRateNew", label: "网络上行(入)流量(Kb/s):InternetInRateNew"},
+            {value: "InternetOutRateNew", label: "网络下行(出)流量(Kb/s):InternetOutRateNew"}
         ];
         $scope.PeriodOptions = [
-            {value: "5m", label: "5分钟"},
-            {value: "15m", label: "15分钟"},
-            {value: "30m", label: "30分钟"},
-            {value: "1h", label: "1小时"},
-            {value: "1d", label: "1天"}
+            {value: "60", label: "1分钟"},
+            {value: "300", label: "5分钟"},
+            {value: "500", label: "15分钟"}
         ];
         $scope.StatisticsOptions = [
             {value: "Average", label: "平均值:Average"},
@@ -60,9 +59,9 @@ define(['../Alikula', 'jquery'], function(module, $) {
         ];
         $scope.options = {
             InstanceId:'i-236pp2bne',
-            Namespace: 'acs/ecs',
-            MetricName: 'vm.CPUUtilization',
-            Period: '5m',
+            Namespace: 'acs_ecs',
+            MetricName: 'CPUUtilization',
+            Period: '60',
             Statistics: 'Average',
             StartTime: commonService.dateFormat(new Date(new Date().getTime() - 24*3600*1000), "yyyy-MM-dd HH:mm"),
             EndTime: commonService.dateFormat(new Date(), "yyyy-MM-dd HH:mm")
@@ -108,7 +107,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                 var data = json.Datapoints.Datapoint;
                 var converted = [];
                 for (var i = 0; i < data.length; i++) {
-                    var item = JSON.parse(data[i]);
+                    var item = data[i];
                     converted.push([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])]);
                 }
                 converted.sort(function(i, j) {return i > j ? 1 : -1;});
@@ -126,7 +125,7 @@ define(['../Alikula', 'jquery'], function(module, $) {
                         }
                         var data = json.Datapoints.Datapoint;
                         for (var i = 0; i < data.length; i++) {
-                            var item = JSON.parse(data[i]);
+                            var item = data[i];
                             thisSeries.addPoint([new Date(item.timestamp).getTime() + 8*3600*1000, Number(item[$scope.options.Statistics])], true, true);
                         }
                     });
