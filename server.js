@@ -9,11 +9,24 @@ app.get('/api/alicms', function (req, res) {
             config.aliyunAccessKeyId,
             config.aliyunAccessKeySecret);
     var mtarget = new MTarget(account);
-    var options = {Namespace: req.query.Namespace, MetricName: req.query.MetricName,
-            instanceId: req.query.instanceId, Dimensions: '{instanceId:"' + req.query.instanceId + '", netname: "eth1"}',
-            StartTime: new Date(req.query.StartTime).getTime() - 8*3600*1000, EndTime: new Date(req.query.EndTime).getTime() - 8*3600*1000,
-            Period: req.query.Period, Statistics: req.query.Statistics,
-            NextToken: 1, Length: 2000};
+    var options = {
+        Project: req.query.Namespace,
+        Metric: req.query.MetricName,
+        Dimensions: '{"instanceId":"' + req.query.instanceId + '"}',
+        StartTime: new Date(req.query.StartTime).getTime() - 8 * 3600 * 1000,
+        EndTime: new Date(req.query.EndTime).getTime() - 8 * 3600 * 1000,
+        Period: req.query.Period,
+        Length: 1000
+    };
+    //var options = {project:"acs_rds",
+    //    Project:"acs_rds",
+    //    Metric:"CpuUsage",
+    //    Period:300,
+    //    StartTime:"2016-03-08T07:20:00Z",
+    //    EndTime:"2016-03-08T09:20:00Z",
+    //    Dimensions:"{instanceId:'rdsh92lw1oodrtpeq5m2h'}",
+    //    Length: 1000
+    //};
     mtarget.getMetricDatumP(options).then(function(response) {
         res.send(response.body);
     });

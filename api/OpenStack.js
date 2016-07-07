@@ -22,7 +22,7 @@ var OpenStack = (function () {
             SignatureMethod: 'HMAC-SHA1',
             SignatureVersion: '1.0',
             SignatureNonce: uuid.v4(),
-            RegionId: 'cn'
+            RegionId: 'cn-hangzhou'
         };
     }
 
@@ -36,6 +36,7 @@ var OpenStack = (function () {
         params.Signature = this.signature(params);
 
         var url = config.aliyunCMSUrl + "?" +  querystring.stringify(params);
+        console.log({url: url, params: params});
         return Request.requestP({method: 'GET', url: url});
     };
 
@@ -44,12 +45,23 @@ var OpenStack = (function () {
     OpenStack.prototype.signature = function (params) {
         var keys = Object.keys(params).sort();
         var orderedParams = [];
-        keys.forEach(function(key) {
-            orderedParams.push(encodeURIComponent(key) + "=" + encodeURIComponent(params[key]));
-        })
-        var StringToSign = 'GET&%2F&' + encodeURIComponent(orderedParams.join('&'));
+        keys.forEach((key) => {
+            orderedParams.push(this._percentEncode(key) + "=" + this._percentEncode(params[key]));
+        });
+        var StringToSign = 'GET&%2F&' + this._percentEncode(orderedParams.join('&'));
         return this._account.hmac_sha1(StringToSign, "base64");
     };
+
+    OpenStack.prototype._percentEncode = function(str) {
+        var str = encodeURIComponent(str);
+        str = str.replace(/\*/g, '%20');
+        str = str.replace(/\'/g, '%27');
+        str = str.replace(/\(/g, '%28');
+        str = str.replace(/\)/g, '%29');
+        return str;
+    };
+
+
     return OpenStack;
 })();
 
