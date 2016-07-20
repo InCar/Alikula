@@ -18,6 +18,7 @@ app.get('/api/alicms', function (req, res) {
         Period: req.query.Period,
         Length: 1000
     };
+    
     //var options = {project:"acs_rds",
     //    Project:"acs_rds",
     //    Metric:"CpuUsage",
